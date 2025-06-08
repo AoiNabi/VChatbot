@@ -1,0 +1,18 @@
+# Ignora entornos virtuales
+venv/
+.env/
+
+# Ignora archivos grandes y compilados
+*.dll
+*.lib
+*.pkl
+*.h5
+*.pt
+*.ckpt
+*.zip
+*.tar.gz
+*.whl
+
+# Ignora archivos temp
+__pycache__/
+*.pyc
