@@ -3,13 +3,11 @@ from llm_handler import LLMHandler
 from voice_input import VoiceInput
 import os
 
-# Cargar modelos públicos sin necesidad de autenticación
-gpt2 = LLMHandler("gpt2")
-distilgpt2 = LLMHandler("distilgpt2")
+# Solo modelo DeepSeek a través de Ollama
+deepseek = LLMHandler("deepseek")
 speech = VoiceInput()
 
-def process(audio_path, model_choice):
-
+def process(audio_path):
     if audio_path is None:
         return "❌ No se recibió audio.", None
 
@@ -22,28 +20,24 @@ def process(audio_path, model_choice):
     if not text or text.startswith("[ERROR"):
         return f"🗣️ Transcripción: {text}\n\n❌ No se pudo obtener texto para responder.", None
 
-    if model_choice == "GPT-2":
-        response = gpt2.chat(text)
-    else:
-        response = distilgpt2.chat(text)
+    response = deepseek.chat(text)
 
     return (
-        f"🗣️ Transcripción: {text}\n\n🤖 {model_choice} responde:\n{response}",
+        f"🗣️ Transcripción: {text}\n\n🤖 DeepSeek responde:\n{response}",
         audio_path
     )
 
 ui = gr.Interface(
     fn=process,
     inputs=[
-        gr.Audio(type="filepath", label="🎙️ Graba tu voz o sube un archivo"),
-        gr.Radio(["GPT-2", "DistilGPT-2"], label="Modelo a usar")
+        gr.Audio(type="filepath", label="🎙️ Graba tu voz o sube un archivo")
     ],
     outputs=[
         "text",
         gr.Audio(label="🔊 Reproducir audio grabado")
     ],
-    title="🤖 Chatbot con Voz + LLMs",
-    description="Graba tu voz o sube un .wav; elige GPT-2 o DistilGPT-2 y verás la transcripción + respuesta."
+    title="🤖 Chatbot con Voz + DeepSeek",
+    description="Graba tu voz o sube un .wav; el modelo DeepSeek responderá con texto generado."
 )
 
 ui.launch()
