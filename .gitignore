@@ -12,7 +12,12 @@ venv/
 *.zip
 *.tar.gz
 *.whl
+*.wav
 
 # Ignora archivos temp
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+.gradio/
