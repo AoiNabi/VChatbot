@@ -3,10 +3,11 @@ import requests
 
 class LLMHandler:
     def __init__(self, model_name):
-        if model_name != "deepseek":
-            raise ValueError("Este handler solo soporta el modelo 'deepseek'")
+        modelos_permitidos = ["deepseek-r1:7b", "gemma3:4b"]
+        if model_name not in modelos_permitidos:
+            raise ValueError(f"Este handler solo soporta: {modelos_permitidos}")
         self.model_name = model_name
-        print("🧠 Conectando con modelo DeepSeek vía Ollama...")
+        print(f"🧠 Conectando con modelo {self.model_name} vía Ollama...")
 
     def chat(self, prompt):
         try:
@@ -21,7 +22,7 @@ class LLMHandler:
             response = requests.post(
                 "http://localhost:11434/api/generate",
                 json={
-                    "model": "deepseek-r1:7b",
+                    "model": self.model_name,
                     "prompt": full_prompt,
                     "stream": False
                 }
