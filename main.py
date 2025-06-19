@@ -42,8 +42,8 @@ ui = gr.Interface(
         "text",
         gr.Audio(label="🔊 Reproducir audio grabado")
     ],
-    title="🤖 Chatbot con Voz + LLMs vía Ollama",
-    description="Graba tu voz o sube un .wav; elige entre DeepSeek o Gemma 3 para obtener una respuesta generada por IA."
+    title="🤖 Vchatbot",
+    description="Graba tu voz o sube un archivo de audio (.wav); elige entre DeepSeek o Gemma 3 para obtener una respuesta generada por IA."
 )
 
 ui.launch()
