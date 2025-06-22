@@ -8,7 +8,7 @@ deepseek = LLMHandler("deepseek-r1:7b")
 gemma = LLMHandler("gemma3:4b")
 speech = VoiceInput()
 
-# Procesar entrada de texto y enviar al modelo
+# Procesar entrada de texto y enviar al modelo seleccionado
 def chat_interface(user_input, chat_history, model_choice):
     if not user_input:
         return chat_history, "", None
@@ -19,7 +19,7 @@ def chat_interface(user_input, chat_history, model_choice):
     chat_history.append({"role": "user", "content": user_input})
     chat_history.append({"role": "assistant", "content": response})
 
-    return chat_history, "", None  # Limpiar campo de texto y audio
+    return chat_history, "", None
 
 # Procesar audio -> transcribir -> enviar al input de texto
 def audio_to_text(audio_path):
@@ -44,11 +44,9 @@ with gr.Blocks() as ui:
 
     audio_input = gr.Audio(type="filepath", label="🎙️ O graba tu voz", interactive=True)
 
-    # Al hacer click en "Enviar" o presionar Enter
+    # Guardar tras "Enviar" o presionar Enter
     send_btn.click(chat_interface, inputs=[text_input, state, model_selector], outputs=[chatbot, text_input, audio_input])
     text_input.submit(chat_interface, inputs=[text_input, state, model_selector], outputs=[chatbot, text_input, audio_input])
-
-    # Cuando se graba audio, se transcribe y se coloca en el campo de texto
     audio_input.change(audio_to_text, inputs=audio_input, outputs=text_input)
 
 ui.launch()
