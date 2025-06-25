@@ -2,6 +2,7 @@ import gradio as gr
 from llm_handler import LLMHandler
 from voice_input import VoiceInput
 from pdf_reader import PDFReader
+from image_generator import ImageGenerator
 import os
 
 # Instancias de modelos y utilidades
@@ -9,6 +10,7 @@ deepseek = LLMHandler("deepseek-r1:7b")
 gemma = LLMHandler("gemma3:4b")
 speech = VoiceInput()
 pdf_reader = PDFReader()
+image_gen = ImageGenerator()
 
 # Función principal del chatbot
 def chat_interface(user_input, chat_history, model_choice, pdf_text):
@@ -40,10 +42,16 @@ def process_pdf(file):
     print(f"📄 Texto extraído del PDF:\n{extracted[:500]}...")
     return extracted
 
+# Generación de imagen
+def generate_image_from_prompt(prompt):
+    if not prompt:
+        return None
+    return image_gen.generate_image(prompt)
+
 # UI
 with gr.Blocks() as ui:
     gr.Markdown("# 🤖 VChatbot")
-    gr.Markdown("Chat por voz o texto con DeepSeek o Gemma 3.")
+    gr.Markdown("Chatea usando Deepseek o Gemma 3 y escoge entre distintas funciones.")
 
     with gr.Row():
         model_selector = gr.Radio(["DeepSeek", "Gemma 3"], label="🔍 Elige el modelo", value="DeepSeek")
@@ -58,6 +66,13 @@ with gr.Blocks() as ui:
 
     audio_input = gr.Audio(type="filepath", label="🎙️ Graba tu voz", interactive=True)
     pdf_upload = gr.File(label="📄 Sube un PDF", file_types=[".pdf"])
+
+    gr.Markdown("🎨 Genera una imagen dando una breve descripción")
+    with gr.Row():
+        image_prompt_input = gr.Textbox(placeholder="Escribe una descripción para la imagen...", label="Prompt para imagen")
+        generate_btn = gr.Button("Generar imagen 🎨")
+
+    generated_image = gr.Image(label="🖼️ Imagen generada")
 
     # Acciones al enviar input
     send_btn.click(
@@ -78,6 +93,12 @@ with gr.Blocks() as ui:
         process_pdf,
         inputs=pdf_upload,
         outputs=pdf_state,
+    )
+
+    generate_btn.click(
+        generate_image_from_prompt,
+        inputs=image_prompt_input,
+        outputs=generated_image,
     )
 
 ui.launch()
