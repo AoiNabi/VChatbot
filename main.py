@@ -43,7 +43,7 @@ def process_pdf(file):
 # UI
 with gr.Blocks() as ui:
     gr.Markdown("# 🤖 VChatbot")
-    gr.Markdown("Chat por voz o texto con DeepSeek o Gemma 3. También puedes subir un PDF 📄")
+    gr.Markdown("Chat por voz o texto con DeepSeek o Gemma 3.")
 
     with gr.Row():
         model_selector = gr.Radio(["DeepSeek", "Gemma 3"], label="🔍 Elige el modelo", value="DeepSeek")
@@ -56,7 +56,7 @@ with gr.Blocks() as ui:
         text_input = gr.Textbox(placeholder="Escribe un mensaje...", label="Entrada de texto", lines=2)
         send_btn = gr.Button("Enviar")
 
-    audio_input = gr.Audio(type="filepath", label="🎙️ O graba tu voz", interactive=True)
+    audio_input = gr.Audio(type="filepath", label="🎙️ Graba tu voz", interactive=True)
     pdf_upload = gr.File(label="📄 Sube un PDF", file_types=[".pdf"])
 
     # Acciones al enviar input
